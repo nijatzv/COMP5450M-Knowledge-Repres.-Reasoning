@@ -1,0 +1,113 @@
+
+% Saved by Prover9-Mace4 Version 0.5, December 2007.
+% Last line is a lie. It is there to stop the Prover9-Mace4
+% GUI giving a warning when the file is loaded.
+% This file was actually created by BB Prover9 Autograder
+
+set(ignore_option_dependencies). % GUI handles dependencies
+
+if(Prover9). % Options for Prover9
+  clear(auto).
+  clear(auto_setup).
+  clear(auto_limits).
+  clear(auto_denials).
+  clear(auto_inference).
+  clear(auto_process).
+  assign(eq_defs, pass).
+  assign(max_seconds, 10).
+  assign(max_weight, 2147483647).
+  assign(sos_limit, -1).
+  clear(predicate_elim).
+  set(binary_resolution).
+  set(paramodulation).
+  set(factor).
+end_if.
+
+if(Mace4).   % Options for Mace4
+  assign(max_seconds, 60).
+end_if.
+
+formulas(assumptions).
+
+%% The Academy
+%% A logic puzzle by Brandon Bennett
+
+%% Prover9 file: academy.p9
+
+%% To solve this first-order logic proof problem, you must replace
+%% each of the assumption place-holders __An__ and the goal place-holder
+%% __G__, with an approapriate first-order formula that captures the
+%% meaning of the given English sentence.
+
+%% Then run Prover9.
+%% If your representations are correct, it should find a Proof.
+%% You can also check your representations using the Gradescope Autograder.
+
+%% In writing the formulae, you should only use the following vocabulary:
+
+%% Logical symbols:           &  |  -  ->   <->  =  all  exists
+%% Brackets and separators:   ( )  [  ]  ,  .
+%% Variables:                 Whatever you like, but must be quantified.
+
+%% Names: thales, theano
+%% Properties: Happy, KRR_Expert, Mathematician, Playwright, Painter, DreamsOfSuccess
+%% Relations: Taller, Shorter, Idolises, Imitates
+
+
+%% Use only the specified vocabulary, otherwise the autograder will not work.
+
+
+
+%% A1: "At least two painters are shorter than Theano."
+
+(exists x exists y (Painter(x) & Painter(y) & x != y & Shorter(x, theano) & Shorter(y, theano))).
+
+%% A2: "Every playwright who dreams of success is not happy."
+
+all x (Playwright(x) & DreamsOfSuccess(x) -> -Happy(x)).
+
+%% A3: "Everyone who imitates a KRR expert is either a playwright or a mathematician."
+
+all x all y (Imitates(x, y) & KRR_Expert(y) -> (Playwright(x) | Mathematician(x))).
+
+%% A4: "Every painter idolises exactly one KRR expert (they do not necessarily idolise the
+%%      same one)."
+
+all x (Painter(x) -> (exists y (KRR_Expert(y) & Idolises(x, y) & all z (KRR_Expert(z) & Idolises(x, z) -> z = y)))).
+
+%% A5: "Idolisation implies imitation."
+
+all x all y (Idolises(x, y) -> Imitates(x, y)).
+
+%% A6: "Among KRR experts, only Thales is idolised by someone shorter than Theano."
+
+all x all y (KRR_Expert(x) & Idolises(y, x) & Shorter(y, theano) -> x = thales).
+
+%% A7: "Thales is the only KRR expert who is taller than Theano."
+
+all x (KRR_Expert(x) & Taller(x, theano) -> x = thales) & KRR_Expert(thales) & Taller(thales, theano).
+
+%% A8: (*Amended version*)
+%%     "If someone is taller than any person, then they are taller than everyone who
+%%      is shorter than that person."
+
+all x all y all z (Taller(x, y) & Shorter(z, y) -> Taller(x, z)).
+
+%% A9: "No mathematician is a painter."
+
+all x (Mathematician(x) -> -Painter(x)).
+
+%% A10: "Anyone who idolises someone taller than themself dreams of success."
+
+all x all y (Idolises(x, y) & Taller(y, x) -> DreamsOfSuccess(x)).
+
+
+end_of_list.
+
+formulas(goals).
+
+%% GOAL: "Some playwright is not happy."
+
+exists x (Playwright(x) & -Happy(x)).
+
+end_of_list.

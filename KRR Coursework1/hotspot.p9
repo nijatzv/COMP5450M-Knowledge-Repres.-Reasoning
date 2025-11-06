@@ -1,8 +1,8 @@
 
 % Saved by Prover9-Mace4 Version 0.5, December 2007.
-% Last line is a lie. It is there to stop the Prover9-Mace4 GUI
-% giving a warning when the file is loaded.
-% This file was actually created by pyprover9 (BB Sept 2023)
+% Last line is a lie. It is there to stop the Prover9-Mace4
+% GUI giving a warning when the file is loaded.
+% This file was actually created by BB Prover9 Autograder
 
 set(ignore_option_dependencies). % GUI handles dependencies
 
@@ -28,21 +28,78 @@ if(Mace4).   % Options for Mace4
 end_if.
 
 formulas(assumptions).
-%%__PREAMBLE__
 
+%% Hotspot
+%% A logic puzzle by Brandon Bennett
+
+%% Prover9 file: hotspot.p9
+
+%% To solve this first-order logic proof problem, you must replace
+%% each of the assumption place-holders __An__ and the goal place-holder
+%% __G__, with an approapriate first-order formula that captures the
+%% meaning of the given English sentence.
+
+%% Then run Prover9.
+%% If your representations are correct, it should find a Proof.
+%% You can also check your representations using the Gradescope Autograder.
+
+%% In writing the formulae, you should only use the following vocabulary:
+
+%% Logical symbols:           &  |  -  ->   <->  =  all  exists
+%% Brackets and separators:   ( )  [  ]  ,  .
+%% Variables:                 Whatever you like, but must be quantified.
+
+%% Propositions: ThinkPadInOffice, SmartSpeakerFlashing, IHearMusic, ListeningToRadio,
+%%      ThinkPadOnline, WiFiUp, MobileOn5G, ThinkPadInHotSpotRangeMobile, MobileInOffice,
+%%      MobileInLounge, MobileInWashRoom, ThinkPadInWashRoom, MobileOnTable,
+%%      MobileOnSettee
+
+
+%% Use only the specified vocabulary, otherwise the autograder will not work.
+
+
+
+%% A1: "If the the mobile is in the office, it is either on the table or on the settee."
 
 MobileInOffice -> (MobileOnTable | MobileOnSettee).
+
+%% A2: "The ThinkPad is online if and only if either: (a) the WiFi is up; or (b) the
+%%      mobile is connected to 5G and the mobile is in hotspot range."
+
 ThinkPadOnline <-> (WiFiUp | MobileOn5G & ThinkPadInHotSpotRangeMobile).
+
+%% A3: "If the smart speaker light is flashing, the WiFi is down."
+
 SmartSpeakerFlashing -> -WiFiUp.
+
+%% A4: "The mobile is in one of three rooms: office or lounge, or wash room."
+
 MobileInOffice | MobileInLounge | MobileInWashRoom.
+
+%% A5: "The ThinkPad is in the office, the smart speaker light is flashing and I hear
+%%      music."
+
 ThinkPadInOffice & SmartSpeakerFlashing & IHearMusic.
+
+%% A6: "If ThinkPad is offline and I hear music, then I must be listening to the radio."
+
 (-ThinkPadOnline & IHearMusic) -> ListeningToRadio.
+
+%% A7: "The ThinkPad is always in hotspot range of my mobile except when one is in the
+%%      office and the other in the wash room."
+
 ThinkPadInHotSpotRangeMobile <-> -((ThinkPadInOffice & MobileInWashRoom) | (MobileInOffice & ThinkPadInWashRoom)).
+
+%% A8: "The mobile is neither on the table nor on the settee."
+
 -MobileOnTable & -MobileOnSettee.
+
 
 end_of_list.
 
 formulas(goals).
+
+%% GOAL: "The mobile is in the lounge, unless I'm listening to the radio."
 
 ListeningToRadio | MobileInLounge.
 
